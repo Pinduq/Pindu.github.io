@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01.4.1.1 // CLOUDY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0a0a12;
+            --secondary: #1a1a2a;
+            --accent: #00ff9d;
+            --text: #c5c5d3;
+            --muted: #6272a4;
+            --background: #050510;
+            --terminal: #0f0f1a;
+            --neon-glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+            --box-glow: 0 0 15px rgba(0, 255, 157, 0.3);
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Rain effect */
+        .rain-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .rain-drop {
+            position: absolute;
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--accent));
+            animation: rain-fall linear infinite;
+            opacity: 0.6;
+        }
+        
+        @keyframes rain-fall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 30px;
+            background-color: rgba(10, 10, 18, 0.85);
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+            box-shadow: var(--box-glow);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: var(--neon-glow);
+        }
+        
+        .logo .cat-icon {
+            color: #ff79c6;
+            margin-right: 10px;
+        }
+        
+        .header-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+        }
+        
+        .effects-toggle {
+            background-color: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+        
+        .effects-toggle:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.7);
+        }
+        
+        .effects-toggle i {
+            font-size: 1.1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            background-color: rgba(26, 26, 42, 0.7);
+            color: var(--text);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .social-link:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+        
+        .social-link.youtube:hover {
+            background-color: #ff0000;
+            color: white;
+            box-shadow: 0 0 15px #ff0000;
+        }
+        
+        .social-link.discord:hover {
+            background-color: #5865F2;
+            color: white;
+            box-shadow: 0 0 15px #5865F2;
+        }
+        
+        .social-link.github:hover {
+            background-color: #f0f6fc;
+            color: #0d1117;
+            box-shadow: 0 0 15px #f0f6fc;
+        }
+        
+        .admin-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 121, 198, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .admin-toggle:hover {
+            background-color: rgba(255, 121, 198, 0.7);
+            transform: scale(1.3);
+        }
+        
+        .welcome-section {
+            background-color: rgba(10, 10, 18, 0.85);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--secondary);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            box-shadow: var(--box-glow);
+        }
+        
+        .welcome-section::before {
+            content: "//";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: var(--muted);
+            font-size: 1.2rem;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--accent);
+        }
+        
+        .bio-box {
+            background-color: var(--terminal);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid var(--accent);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bio-box .source {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .updates {
+            background-color: rgba(10, 10, 18, 0.85);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--secondary);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--box-glow);
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        /* Custom scrollbar */
+        .updates::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .updates::-webkit-scrollbar-track {
+            background: rgba(26, 26, 42, 0.5);
+            border-radius: 4px;
+        }
+        
+        .updates::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        .themes {
+            background-color: rgba(10, 10, 18, 0.85);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--secondary);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--box-glow);
+            height: 500px;
+            overflow-y: auto;
+        }
+        
+        .themes::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .themes::-webkit-scrollbar-track {
+            background: rgba(26, 26, 42, 0.5);
+            border-radius: 4px;
+        }
+        
+        .themes::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        .devices {
+            background-color: rgba(10, 10, 18, 0.85);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid var(--secondary);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--box-glow);
+            height: 500px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .devices::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .devices::-webkit-scrollbar-track {
+            background: rgba(26, 26, 42, 0.5);
+            border-radius: 4px;
+        }
+        
+        .devices::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 5px var(--accent);
+        }
+        
+        .section-title::before {
+            content: ">>";
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--muted);
+        }
+        
+        .year {
+            color: var(--muted);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--secondary);
+            padding-bottom: 5px;
+        }
+        
+        .update-item {
+            background-color: rgba(15, 15, 26, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--muted);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .update-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .update-item:hover {
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .update-item:hover::before {
+            left: 100%;
+        }
+        
+        .update-date {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        .update-content {
+            font-size: 1rem;
+        }
+        
+        .theme-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .theme-tag {
+            background-color: var(--secondary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .theme-tag::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .theme-tag:hover {
+            background-color: rgba(26, 26, 42, 0.9);
+            border-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .theme-tag:hover::before {
+            left: 100%;
+        }
+        
+        .theme-tag.active {
+            background-color: rgba(0, 255, 157, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+        }
+        
+        .theme-tag .theme-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .device-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .device-item {
+            background-color: rgba(15, 15, 26, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--muted);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .device-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .device-item:hover {
+            border-left-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .device-item:hover::before {
+            left: 100%;
+        }
+        
+        .device-name {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-size: 1.05rem;
+        }
+        
+        .device-specs {
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .device-icon {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .device-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .device-actions.visible {
+            opacity: 1;
+        }
+        
+        .device-btn {
+            background-color: var(--secondary);
+            color: var(--text);
+            border: 1px solid var(--muted);
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .device-btn:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+        }
+        
+        .device-btn.admin-only {
+            display: none;
+        }
+        
+        .device-btn.admin-only.visible {
+            display: inline-block;
+        }
+        
+        .admin-badge {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 121, 198, 0.2);
+            color: #ff79c6;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 121, 198, 0.5);
+        }
+        
+        .admin-badge.visible {
+            display: inline-block;
+        }
+        
+        /* Edit buttons for admin mode */
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 255, 157, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .edit-btn.visible {
+            opacity: 1;
+        }
+        
+        .edit-btn:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        .welcome-section .edit-btn {
+            top: 15px;
+            right: 15px;
+        }
+        
+        .updates .edit-btn {
+            top: 25px;
+            right: 25px;
+        }
+        
+        .themes .edit-btn {
+            top: 25px;
+            right: 25px;
+        }
+        
+        .devices .edit-btn {
+            top: 25px;
+            right: 25px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--secondary);
+            margin-top: 30px;
+            font-family: 'Share Tech Mono', monospace;
+            position: relative;
+        }
+        
+        footer .edit-btn {
+            top: 10px;
+            right: 10px;
+        }
+        
+        .credit {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Terminal lines */
+        .terminal-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            width: 100%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .terminal-line:nth-child(1) { top: 20%; }
+        .terminal-line:nth-child(2) { top: 40%; }
+        .terminal-line:nth-child(3) { top: 60%; }
+        .terminal-line:nth-child(4) { top: 80%; }
+        
+        /* Scan line effect */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+            box-shadow: 0 0 10px var(--accent);
+            animation: scan 5s linear infinite;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        
+        /* Matrix code effect in corners */
+        .matrix-corner {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            opacity: 0.05;
+            z-index: -1;
+        }
+        
+        .matrix-corner.tl {
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+        }
+        
+        .matrix-corner.tr {
+            top: 0;
+            right: 0;
+            background: radial-gradient(circle, #ff79c6 0%, transparent 70%);
+        }
+        
+        .matrix-corner.bl {
+            bottom: 0;
+            left: 0;
+            background: radial-gradient(circle, #8a2be2 0%, transparent 70%);
+        }
+        
+        .matrix-corner.br {
+            bottom: 0;
+            right: 0;
+            background: radial-gradient(circle, #ffff55 0%, transparent 70%);
+        }
+        
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .admin-modal-content {
+            background-color: var(--primary);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 50px var(--accent);
+            position: relative;
+            animation: modal-appear 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modal-appear {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .admin-modal h3 {
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            text-align: center;
+            text-shadow: 0 0 10px var(--accent);
+        }
+        
+        .admin-input {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--terminal);
+            border: 1px solid var(--secondary);
+            color: var(--text);
+            border-radius: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .admin-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+        
+        .admin-textarea {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--terminal);
+            border: 1px solid var(--secondary);
+            color: var(--text);
+            border-radius: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .admin-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+        }
+        
+        .admin-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+        
+        .admin-btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .admin-btn.login {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        .admin-btn.login:hover {
+            background-color: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .admin-btn.cancel {
+            background-color: transparent;
+            color: var(--text);
+            border: 1px solid var(--muted);
+        }
+        
+        .admin-btn.cancel:hover {
+            background-color: rgba(255, 85, 85, 0.1);
+            color: #ff5555;
+            border-color: #ff5555;
+        }
+        
+        .admin-btn.save {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+        
+        .admin-btn.save:hover {
+            background-color: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .admin-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--accent);
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .admin-status.visible {
+            opacity: 1;
+        }
+        
+        /* Admin tabs */
+        .admin-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+        
+        .admin-tab {
+            padding: 10px 20px;
+            background-color: transparent;
+            color: var(--text);
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.3s;
+        }
+        
+        .admin-tab:hover {
+            background-color: rgba(26, 26, 42, 0.5);
+        }
+        
+        .admin-tab.active {
+            background-color: rgba(0, 255, 157, 0.1);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .admin-tab-content {
+            display: none;
+        }
+        
+        .admin-tab-content.active {
+            display: block;
+        }
+        
+        /* Secret admin trigger */
+        .secret-admin {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            opacity: 0.01;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        /* Update item edit buttons */
+        .update-edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 255, 157, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .update-item:hover .update-edit-btn {
+            opacity: 1;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .updates, .themes, .devices {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .header-controls {
+                align-items: center;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .updates, .themes, .devices {
+                height: 350px;
+            }
+            
+            .admin-modal-content {
+                padding: 25px;
+                width: 95%;
+            }
+            
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rain effect -->
+    <div class="rain-container" id="rain-container"></div>
+    
+    <!-- Terminal lines -->
+    <div class="terminal-line"></div>
+    <div class="terminal-line"></div>
+    <div class="terminal-line"></div>
+    <div class="terminal-line"></div>
+    
+    <!-- Scan line -->
+    <div class="scan-line"></div>
+    
+    <!-- Matrix corners -->
+    <div class="matrix-corner tl"></div>
+    <div class="matrix-corner tr"></div>
+    <div class="matrix-corner bl"></div>
+    <div class="matrix-corner br"></div>
+    
+    <!-- Secret admin trigger (hidden) -->
+    <div class="secret-admin" id="secret-admin"></div>
+    
+    <!-- Admin login modal -->
+    <div class="admin-modal" id="admin-modal">
+        <div class="admin-modal-content">
+            <div class="admin-status" id="admin-status"></div>
+            
+            <!-- Login Tab -->
+            <div id="login-tab" class="admin-tab-content active">
+                <h3><i class="fas fa-user-secret"></i> ADMIN ACCESS</h3>
+                <p style="text-align: center; margin-bottom: 25px; color: var(--muted);">
+                    // Restricted area. Enter admin key.
+                </p>
+                <input type="password" class="admin-input" id="admin-password" placeholder="Enter admin key..." autocomplete="off">
+                <div class="admin-buttons">
+                    <button class="admin-btn cancel" id="admin-cancel">Cancel</button>
+                    <button class="admin-btn login" id="admin-login">Login</button>
+                </div>
+                <p style="text-align: center; margin-top: 25px; font-size: 0.8rem; color: var(--muted);">
+                    Hint: Check the JavaScript code for the password...
+                </p>
+            </div>
+            
+            <!-- Content Editor Tab -->
+            <div id="editor-tab" class="admin-tab-content">
+                <h3><i class="fas fa-edit"></i> CONTENT EDITOR</h3>
+                
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="welcome">Welcome</button>
+                    <button class="admin-tab" data-tab="updates">Updates</button>
+                    <button class="admin-tab" data-tab="devices">Devices</button>
+                    <button class="admin-tab" data-tab="footer">Footer</button>
+                </div>
+                
+                <!-- Welcome Editor -->
+                <div class="admin-tab-content active" data-tab="welcome">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">Edit Welcome Section</h4>
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Welcome Text</label>
+                    <textarea class="admin-textarea" id="edit-welcome-text" placeholder="Enter welcome text..."></textarea>
+                    
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Bio Text</label>
+                    <textarea class="admin-textarea" id="edit-bio-text" placeholder="Enter bio text..."></textarea>
+                    
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Bio Source</label>
+                    <input type="text" class="admin-input" id="edit-bio-source" placeholder="Bio source...">
+                    
+                    <div class="admin-buttons">
+                        <button class="admin-btn cancel" id="cancel-welcome-edit">Cancel</button>
+                        <button class="admin-btn save" id="save-welcome-edit">Save Changes</button>
+                    </div>
+                </div>
+                
+                <!-- Updates Editor -->
+                <div class="admin-tab-content" data-tab="updates">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">Edit Updates</h4>
+                    
+                    <div id="updates-list-editor">
+                        <!-- Updates will be loaded here -->
+                    </div>
+                    
+                    <div class="admin-buttons">
+                        <button class="admin-btn cancel" id="cancel-updates-edit">Cancel</button>
+                        <button class="admin-btn save" id="save-updates-edit">Save All Updates</button>
+                        <button class="admin-btn" id="add-update-btn" style="background-color: rgba(255, 121, 198, 0.1); color: #ff79c6; border: 1px solid #ff79c6;">
+                            <i class="fas fa-plus"></i> Add Update
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Devices Editor -->
+                <div class="admin-tab-content" data-tab="devices">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">Edit Devices</h4>
+                    
+                    <div id="devices-list-editor">
+                        <!-- Devices will be loaded here -->
+                    </div>
+                    
+                    <div class="admin-buttons">
+                        <button class="admin-btn cancel" id="cancel-devices-edit">Cancel</button>
+                        <button class="admin-btn save" id="save-devices-edit">Save All Devices</button>
+                        <button class="admin-btn" id="add-device-editor-btn" style="background-color: rgba(0, 255, 157, 0.1); color: var(--accent); border: 1px solid var(--accent);">
+                            <i class="fas fa-plus"></i> Add Device
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Footer Editor -->
+                <div class="admin-tab-content" data-tab="footer">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">Edit Footer</h4>
+                    
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Main Footer Text</label>
+                    <input type="text" class="admin-input" id="edit-footer-main" placeholder="Main footer text...">
+                    
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">First Credit Line</label>
+                    <input type="text" class="admin-input" id="edit-footer-credit1" placeholder="First credit line...">
+                    
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Second Credit Line</label>
+                    <input type="text" class="admin-input" id="edit-footer-credit2" placeholder="Second credit line...">
+                    
+                    <div class="admin-buttons">
+                        <button class="admin-btn cancel" id="cancel-footer-edit">Cancel</button>
+                        <button class="admin-btn save" id="save-footer-edit">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-terminal cat-icon"></i> 01.4.1.1 // CLOUDY
+            </div>
+            <div class="header-controls">
+                <button class="effects-toggle" id="toggle-effects">
+                    <i class="fas fa-cloud-rain"></i> 
+                    <span>Click HERE to turn effects off</span>
+                </button>
+                <div class="social-links">
+                    <a href="https://youtube.com" target="_blank" class="social-link youtube" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://discord.com" target="_blank" class="social-link discord" title="Discord">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-link github" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="admin-toggle" id="admin-toggle" title="Admin Access"></div>
+        </header>
+        
+        <section class="welcome-section">
+            <button class="edit-btn admin-only" id="edit-welcome-btn">Edit</button>
+            <p class="welcome-text" id="welcome-text">
+                <span class="highlight">// SYSTEM BOOT: COMPLETE</span>
+                <br><br>
+                <span class="highlight">>> oh, h-hi there v-visitor! uMu >.<</span>
+                <br><br>
+                Welcome to my personal blog where you can find all of my stuff in here! uMu also, h-here is my bio f-from guns.lol!
+            </p>
+            
+            <div class="bio-box">
+                <p id="bio-text"><span class="highlight">Cloudy</span> is the fluffiest catboy male ever ^mK</p>
+                <p>Digital artist, gamer, and tech enthusiast. Love coding cute websites and sharing my creations with the world!</p>
+                <p class="source" id="bio-source">// bio from guns.lol profile | ACCESS: GRANTED</p>
+            </div>
+        </section>
+        
+        <div class="main-content">
+            <div class="left-column">
+                <div class="updates">
+                    <button class="edit-btn admin-only" id="edit-updates-btn">Edit</button>
+                    <h2 class="section-title">Latest Updates</h2>
+                    <div class="year">>> 2025</div>
+                    
+                    <div id="updates-container">
+                        <!-- Updates will be loaded here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-column">
+                <div class="themes">
+                    <button class="edit-btn admin-only" id="edit-themes-btn">Edit</button>
+                    <h2 class="section-title">Theme Selector</h2>
+                    <p>// Select a theme to change interface appearance</p>
+                    
+                    <div class="theme-tags" id="theme-container">
+                        <!-- Themes will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="devices">
+                    <span class="admin-badge" id="admin-badge">ADMIN MODE</span>
+                    <button class="edit-btn admin-only" id="edit-devices-btn">Edit</button>
+                    <h2 class="section-title">Devices I Own</h2>
+                    <p>// My current hardware setup and gadgets</p>
+                    
+                    <div class="device-list" id="device-list">
+                        <!-- Devices will be added here by JavaScript -->
+                    </div>
+                    
+                    <div class="device-actions" id="device-actions">
+                        <button class="device-btn admin-only" id="add-device-btn">
+                            <i class="fas fa-plus"></i> Add Device
+                        </button>
+                        <button class="device-btn admin-only" id="edit-device-btn">
+                            <i class="fas fa-edit"></i> Edit Mode
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <button class="edit-btn admin-only" id="edit-footer-btn">Edit</button>
+            <p id="footer-main">// SYSTEM INIT: 01.02.2025 | LAST UPDATE: 03.15.2025</p>
+            <p class="credit" id="footer-credit1">All credit goes to: richerd-sppe/richerdsppe-weg and fr@st-vonl/fr@st_vug</p>
+            <p class="credit" id="footer-credit2">// ACCESS LEVEL: <span id="access-level">PUBLIC</span> | ENCRYPTION: ACTIVE | CONNECTION: SECURE</p>
+        </footer>
+    </div>
+
+    <!-- Device Modal (for quick add/edit) -->
+    <div id="device-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: var(--primary); border: 1px solid var(--accent); border-radius: 10px; padding: 30px; width: 90%; max-width: 500px; box-shadow: 0 0 30px var(--accent);">
+            <h3 style="color: var(--accent); margin-bottom: 20px; font-family: 'Orbitron', sans-serif;">Add/Edit Device</h3>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: var(--text);">Device Name</label>
+                <input type="text" id="device-name-input" style="width: 100%; padding: 10px; background-color: var(--terminal); border: 1px solid var(--secondary); color: var(--text); border-radius: 5px; font-family: 'Share Tech Mono', monospace;">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: var(--text);">Specifications</label>
+                <textarea id="device-specs-input" rows="4" style="width: 100%; padding: 10px; background-color: var(--terminal); border: 1px solid var(--secondary); color: var(--text); border-radius: 5px; font-family: 'Share Tech Mono', monospace; resize: vertical;"></textarea>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: var(--text);">Icon</label>
+                <select id="device-icon-input" style="width: 100%; padding: 10px; background-color: var(--terminal); border: 1px solid var(--secondary); color: var(--text); border-radius: 5px; font-family: 'Share Tech Mono', monospace;">
+                    <option value="fa-laptop">Laptop</option>
+                    <option value="fa-desktop">Desktop</option>
+                    <option value="fa-mobile-alt">Phone</option>
+                    <option value="fa-tablet-alt">Tablet</option>
+                    <option value="fa-headphones">Headphones</option>
+                    <option value="fa-keyboard">Keyboard</option>
+                    <option value="fa-mouse">Mouse</option>
+                    <option value="fa-gamepad">Gamepad</option>
+                    <option value="fa-microchip">CPU</option>
+                    <option value="fa-server">Server</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="cancel-device-btn" style="background-color: var(--secondary); color: var(--text); border: 1px solid var(--muted); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-family: 'Share Tech Mono', monospace;">Cancel</button>
+                <button id="save-device-btn" style="background-color: var(--accent); color: var(--primary); border: 1px solid var(--accent); padding: 10px 20px; border-radius: 6px; cursor: pointer; font-family: 'Share Tech Mono', monospace;">Save Device</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create rain effect
+        function createRain() {
+            const container = document.getElementById('rain-container');
+            const dropCount = 150;
+            
+            for (let i = 0; i < dropCount; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('rain-drop');
+                
+                // Random horizontal position
+                drop.style.left = `${Math.random() * 100}vw`;
+                
+                // Random vertical start position
+                drop.style.top = `${Math.random() * -100}px`;
+                
+                // Random animation duration (speed)
+                const duration = Math.random() * 1 + 0.5;
+                drop.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                const delay = Math.random() * 5;
+                drop.style.animationDelay = `${delay}s`;
+                
+                // Random length
+                const length = Math.random() * 40 + 30;
+                drop.style.height = `${length}px`;
+                
+                // Random opacity
+                drop.style.opacity = Math.random() * 0.4 + 0.3;
+                
+                container.appendChild(drop);
+            }
+        }
+        
+        // Initialize themes
+        const themes = [
+            { name: 'ocean', primary: '#0a121a', secondary: '#1a2a3a', accent: '#00ccff', icon: 'fa-water' },
+            { name: 'terminal', primary: '#0a0a0a', secondary: '#1a1a1a', accent: '#00ff00', icon: 'fa-terminal' },
+            { name: 'cherry', primary: '#1a0a0f', secondary: '#2a1a1f', accent: '#ff3b6d', icon: 'fa-heart' },
+            { name: 'adher', primary: '#0a1a1a', secondary: '#1a2a2a', accent: '#00cccc', icon: 'fa-snowflake' },
+            { name: 'deepsae', primary: '#0a0a1a', secondary: '#1a1a2a', accent: '#8a2be2', icon: 'fa-infinity' },
+            { name: 'neon', primary: '#050510', secondary: '#151525', accent: '#ff00ff', icon: 'fa-lightbulb' },
+            { name: 'danger', primary: '#1a0a0a', secondary: '#2a1a1a', accent: '#ff5555', icon: 'fa-exclamation-triangle' },
+            { name: 'retry', primary: '#0a1a0a', secondary: '#1a2a1a', accent: '#55ff55', icon: 'fa-redo' },
+            { name: 'urde5', primary: '#1a1a0a', secondary: '#2a2a1a', accent: '#ffff55', icon: 'fa-code' },
+            { name: 'winter', primary: '#0a121a', secondary: '#1a222a', accent: '#aaccff', icon: 'fa-snowflake' },
+            { name: 'g65', primary: '#1a0a1a', secondary: '#2a1a2a', accent: '#bd93f9', icon: 'fa-gamepad' },
+            { name: 'cyber', primary: '#050510', secondary: '#0a0a1a', accent: '#00ff9d', icon: 'fa-user-secret' }
+        ];
+        
+        // Default devices
+        const defaultDevices = [
+            { name: "Gaming PC", specs: "Ryzen 7 5800X, RTX 3080, 32GB DDR4, 2TB NVMe", icon: "fa-desktop" },
+            { name: "MacBook Pro", specs: "M2 Pro, 16GB RAM, 1TB SSD, 14-inch", icon: "fa-laptop" },
+            { name: "Custom Keyboard", specs: "60% layout, Gateron Yellow switches, PBT keycaps", icon: "fa-keyboard" },
+            { name: "Gaming Mouse", specs: "Wireless, 25K DPI, RGB lighting, 70g weight", icon: "fa-mouse" },
+            { name: "Studio Headphones", specs: "Open-back, 250 Ohm impedance, Studio reference", icon: "fa-headphones" },
+            { name: "Smartphone", specs: "Android, 256GB storage, 120Hz AMOLED display", icon: "fa-mobile-alt" }
+        ];
+        
+        // Default updates
+        const defaultUpdates = [
+            { date: "2025-02-15 14:32:07", content: "Launched the new blog design with cyberpunk aesthetic and rain effect." },
+            { date: "2025-01-28 09:15:42", content: "Added 12 new themes to the collection, including 'neon' and 'winter'." },
+            { date: "2025-01-10 16:45:23", content: "Started working on my digital art portfolio section. Coming soon!" },
+            { date: "2024-12-05 11:20:18", content: "Updated security protocols and implemented new encryption for user data." },
+            { date: "2024-11-22 20:05:33", content: "Created new artwork collection 'Neon Dreams' - available for viewing now." },
+            { date: "2024-10-30 13:42:55", content: "Fixed several bugs in the theme system and improved mobile responsiveness." }
+        ];
+        
+        // Default welcome content
+        const defaultWelcome = {
+            text: `// SYSTEM BOOT: COMPLETE\n\n>> oh, h-hi there v-visitor! uMu >.<\n\nWelcome to my personal blog where you can find all of my stuff in here! uMu also, h-here is my bio f-from guns.lol!`,
+            bio: `Cloudy is the fluffiest catboy male ever ^mK\nDigital artist, gamer, and tech enthusiast. Love coding cute websites and sharing my creations with the world!`,
+            source: "// bio from guns.lol profile | ACCESS: GRANTED"
+        };
+        
+        // Default footer content
+        const defaultFooter = {
+            main: "// SYSTEM INIT: 01.02.2025 | LAST UPDATE: 03.15.2025",
+            credit1: "All credit goes to: richerd-sppe/richerdsppe-weg and fr@st-vonl/fr@st_vug",
+            credit2: "// ACCESS LEVEL: PUBLIC | ENCRYPTION: ACTIVE | CONNECTION: SECURE"
+        };
+        
+        // ADMIN SYSTEM - Only you can access
+        let isAdmin = false;
+        const ADMIN_PASSWORD = "Pindu2018isveryverycool"; // Your custom password
+        
+        // Create theme tags
+        function initThemes() {
+            const container = document.getElementById('theme-container');
+            
+            themes.forEach(theme => {
+                const tag = document.createElement('div');
+                tag.classList.add('theme-tag');
+                if (theme.name === 'cyber') tag.classList.add('active');
+                
+                // Create icon
+                const icon = document.createElement('i');
+                icon.classList.add('fas', theme.icon, 'theme-icon');
+                
+                // Create text
+                const text = document.createTextNode(theme.name.toUpperCase());
+                
+                tag.appendChild(icon);
+                tag.appendChild(text);
+                tag.dataset.theme = theme.name;
+                
+                tag.addEventListener('click', () => {
+                    // Update active theme
+                    document.querySelectorAll('.theme-tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    
+                    // Apply theme
+                    applyTheme(theme);
+                    
+                    // Show notification in console style
+                    console.log(`%c[SYSTEM] Theme changed to ${theme.name.toUpperCase()}`, `color: ${theme.accent}; font-weight: bold;`);
+                });
+                
+                container.appendChild(tag);
+            });
+        }
+        
+        // Initialize content from localStorage
+        function initContent() {
+            // Load welcome content
+            const savedWelcome = localStorage.getItem('cloudy-welcome');
+            if (savedWelcome) {
+                const welcome = JSON.parse(savedWelcome);
+                document.getElementById('welcome-text').innerHTML = welcome.text.replace(/\n/g, '<br>');
+                document.getElementById('bio-text').innerHTML = welcome.bio.replace(/\n/g, '<br>').replace('Cloudy', '<span class="highlight">Cloudy</span>');
+                document.getElementById('bio-source').textContent = welcome.source;
+            } else {
+                localStorage.setItem('cloudy-welcome', JSON.stringify(defaultWelcome));
+            }
+            
+            // Load devices
+            const savedDevices = localStorage.getItem('cloudy-devices');
+            if (savedDevices) {
+                renderDevices(JSON.parse(savedDevices), document.getElementById('device-list'));
+            } else {
+                localStorage.setItem('cloudy-devices', JSON.stringify(defaultDevices));
+                renderDevices(defaultDevices, document.getElementById('device-list'));
+            }
+            
+            // Load updates
+            const savedUpdates = localStorage.getItem('cloudy-updates');
+            if (savedUpdates) {
+                renderUpdates(JSON.parse(savedUpdates), document.getElementById('updates-container'));
+            } else {
+                localStorage.setItem('cloudy-updates', JSON.stringify(defaultUpdates));
+                renderUpdates(defaultUpdates, document.getElementById('updates-container'));
+            }
+            
+            // Load footer
+            const savedFooter = localStorage.getItem('cloudy-footer');
+            if (savedFooter) {
+                const footer = JSON.parse(savedFooter);
+                document.getElementById('footer-main').textContent = footer.main;
+                document.getElementById('footer-credit1').textContent = footer.credit1;
+                document.getElementById('footer-credit2').textContent = footer.credit2;
+            } else {
+                localStorage.setItem('cloudy-footer', JSON.stringify(defaultFooter));
+            }
+        }
+        
+        // Render updates
+        function renderUpdates(updates, container) {
+            container.innerHTML = '';
+            
+            // Group by year
+            const updatesByYear = {};
+            updates.forEach(update => {
+                const year = update.date.substring(0, 4);
+                if (!updatesByYear[year]) {
+                    updatesByYear[year] = [];
+                }
+                updatesByYear[year].push(update);
+            });
+            
+            // Render each year
+            for (const year in updatesByYear) {
+                const yearElement = document.createElement('div');
+                yearElement.classList.add('year');
+                yearElement.textContent = `>> ${year}`;
+                container.appendChild(yearElement);
+                
+                // Render updates for this year
+                updatesByYear[year].forEach((update, index) => {
+                    const item = document.createElement('div');
+                    item.classList.add('update-item');
+                    
+                    const date = document.createElement('div');
+                    date.classList.add('update-date');
+                    date.textContent = `[${update.date}]`;
+                    
+                    const content = document.createElement('div');
+                    content.classList.add('update-content');
+                    content.textContent = update.content;
+                    
+                    // Add edit button for admin
+                    if (isAdmin) {
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('update-edit-btn', 'admin-only');
+                        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                        editBtn.title = 'Edit this update';
+                        editBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            editUpdate(index);
+                        });
+                        item.appendChild(editBtn);
+                    }
+                    
+                    item.appendChild(date);
+                    item.appendChild(content);
+                    container.appendChild(item);
+                });
+            }
+        }
+        
+        // Render devices
+        function renderDevices(devices, container) {
+            container.innerHTML = '';
+            
+            devices.forEach((device, index) => {
+                const item = document.createElement('div');
+                item.classList.add('device-item');
+                
+                const icon = document.createElement('i');
+                icon.classList.add('fas', device.icon, 'device-icon');
+                
+                const name = document.createElement('div');
+                name.classList.add('device-name');
+                name.textContent = device.name;
+                
+                const specs = document.createElement('div');
+                specs.classList.add('device-specs');
+                specs.textContent = device.specs;
+                
+                item.appendChild(icon);
+                item.appendChild(name);
+                item.appendChild(specs);
+                
+                container.appendChild(item);
+            });
+        }
+        
+        // Edit update
+        function editUpdate(index) {
+            const updates = JSON.parse(localStorage.getItem('cloudy-updates') || JSON.stringify(defaultUpdates));
+            const update = updates[index];
+            
+            // Show admin editor tab
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('editor-tab').classList.add('active');
+            
+            // Switch to updates tab
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector('.admin-tab[data-tab="updates"]').classList.add('active');
+            document.querySelector('.admin-tab-content[data-tab="updates"]').classList.add('active');
+            
+            // Load updates into editor
+            loadUpdatesEditor();
+            
+            console.log(`%c[SYSTEM] Editing update #${index + 1}`, "color: #00ff9d; font-weight: bold;");
+        }
+        
+        // Load updates into editor
+        function loadUpdatesEditor() {
+            const container = document.getElementById('updates-list-editor');
+            const updates = JSON.parse(localStorage.getItem('cloudy-updates') || JSON.stringify(defaultUpdates));
+            
+            container.innerHTML = '';
+            
+            updates.forEach((update, index) => {
+                const updateEditor = document.createElement('div');
+                updateEditor.style.marginBottom = '20px';
+                updateEditor.style.padding = '15px';
+                updateEditor.style.backgroundColor = 'rgba(26, 26, 42, 0.5)';
+                updateEditor.style.borderRadius = '8px';
+                updateEditor.style.border = '1px solid var(--secondary)';
+                
+                updateEditor.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h5 style="color: var(--accent); margin: 0;">Update #${index + 1}</h5>
+                        <button class="admin-btn" onclick="removeUpdateEditor(${index})" style="background-color: rgba(255, 85, 85, 0.1); color: #ff5555; border: 1px solid #ff5555; padding: 5px 10px; font-size: 0.8rem;">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Date</label>
+                    <input type="text" class="admin-input update-date-input" data-index="${index}" value="${update.date}" placeholder="YYYY-MM-DD HH:MM:SS">
+                    <label style="display: block; margin-bottom: 5px; color: var(--text); margin-top: 10px;">Content</label>
+                    <textarea class="admin-textarea update-content-input" data-index="${index}" placeholder="Update content..." rows="3">${update.content}</textarea>
+                `;
+                
+                container.appendChild(updateEditor);
+            });
+        }
+        
+        // Load devices into editor
+        function loadDevicesEditor() {
+            const container = document.getElementById('devices-list-editor');
+            const devices = JSON.parse(localStorage.getItem('cloudy-devices') || JSON.stringify(defaultDevices));
+            
+            container.innerHTML = '';
+            
+            devices.forEach((device, index) => {
+                const deviceEditor = document.createElement('div');
+                deviceEditor.style.marginBottom = '20px';
+                deviceEditor.style.padding = '15px';
+                deviceEditor.style.backgroundColor = 'rgba(26, 26, 42, 0.5)';
+                deviceEditor.style.borderRadius = '8px';
+                deviceEditor.style.border = '1px solid var(--secondary)';
+                
+                deviceEditor.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h5 style="color: var(--accent); margin: 0;">Device #${index + 1}</h5>
+                        <button class="admin-btn" onclick="removeDeviceEditor(${index})" style="background-color: rgba(255, 85, 85, 0.1); color: #ff5555; border: 1px solid #ff5555; padding: 5px 10px; font-size: 0.8rem;">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <label style="display: block; margin-bottom: 5px; color: var(--text);">Device Name</label>
+                    <input type="text" class="admin-input device-name-input" data-index="${index}" value="${device.name}" placeholder="Device name">
+                    <label style="display: block; margin-bottom: 5px; color: var(--text); margin-top: 10px;">Specifications</label>
+                    <textarea class="admin-textarea device-specs-input" data-index="${index}" placeholder="Device specifications..." rows="3">${device.specs}</textarea>
+                    <label style="display: block; margin-bottom: 5px; color: var(--text); margin-top: 10px;">Icon</label>
+                    <select class="admin-input device-icon-input" data-index="${index}">
+                        <option value="fa-laptop" ${device.icon === 'fa-laptop' ? 'selected' : ''}>Laptop</option>
+                        <option value="fa-desktop" ${device.icon === 'fa-desktop' ? 'selected' : ''}>Desktop</option>
+                        <option value="fa-mobile-alt" ${device.icon === 'fa-mobile-alt' ? 'selected' : ''}>Phone</option>
+                        <option value="fa-tablet-alt" ${device.icon === 'fa-tablet-alt' ? 'selected' : ''}>Tablet</option>
+                        <option value="fa-headphones" ${device.icon === 'fa-headphones' ? 'selected' : ''}>Headphones</option>
+                        <option value="fa-keyboard" ${device.icon === 'fa-keyboard' ? 'selected' : ''}>Keyboard</option>
+                        <option value="fa-mouse" ${device.icon === 'fa-mouse' ? 'selected' : ''}>Mouse</option>
+                        <option value="fa-gamepad" ${device.icon === 'fa-gamepad' ? 'selected' : ''}>Gamepad</option>
+                        <option value="fa-microchip" ${device.icon === 'fa-microchip' ? 'selected' : ''}>CPU</option>
+                        <option value="fa-server" ${device.icon === 'fa-server' ? 'selected' : ''}>Server</option>
+                    </select>
+                `;
+                
+                container.appendChild(deviceEditor);
+            });
+        }
+        
+        // Remove update from editor
+        window.removeUpdateEditor = function(index) {
+            const updates = JSON.parse(localStorage.getItem('cloudy-updates') || JSON.stringify(defaultUpdates));
+            updates.splice(index, 1);
+            localStorage.setItem('cloudy-updates', JSON.stringify(updates));
+            loadUpdatesEditor();
+            renderUpdates(updates, document.getElementById('updates-container'));
+        };
+        
+        // Remove device from editor
+        window.removeDeviceEditor = function(index) {
+            const devices = JSON.parse(localStorage.getItem('cloudy-devices') || JSON.stringify(defaultDevices));
+            devices.splice(index, 1);
+            localStorage.setItem('cloudy-devices', JSON.stringify(devices));
+            loadDevicesEditor();
+            renderDevices(devices, document.getElementById('device-list'));
+        };
+        
+        // Add new update
+        document.getElementById('add-update-btn').addEventListener('click', function() {
+            const updates = JSON.parse(localStorage.getItem('cloudy-updates') || JSON.stringify(defaultUpdates));
+            const now = new Date();
+            const dateString = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            
+            updates.unshift({
+                date: dateString,
+                content: "New update added. Edit this text!"
+            });
+            
+            localStorage.setItem('cloudy-updates', JSON.stringify(updates));
+            loadUpdatesEditor();
+            renderUpdates(updates, document.getElementById('updates-container'));
+        });
+        
+        // Add new device from editor
+        document.getElementById('add-device-editor-btn').addEventListener('click', function() {
+            const devices = JSON.parse(localStorage.getItem('cloudy-devices') || JSON.stringify(defaultDevices));
+            
+            devices.push({
+                name: "New Device",
+                specs: "Edit these specifications",
+                icon: "fa-laptop"
+            });
+            
+            localStorage.setItem('cloudy-devices', JSON.stringify(devices));
+            loadDevicesEditor();
+            renderDevices(devices, document.getElementById('device-list'));
+        });
+        
+        // Save updates from editor
+        document.getElementById('save-updates-edit').addEventListener('click', function() {
+            const updates = [];
+            const dateInputs = document.querySelectorAll('.update-date-input');
+            const contentInputs = document.querySelectorAll('.update-content-input');
+            
+            for (let i = 0; i < dateInputs.length; i++) {
+                updates.push({
+                    date: dateInputs[i].value,
+                    content: contentInputs[i].value
+                });
+            }
+            
+            localStorage.setItem('cloudy-updates', JSON.stringify(updates));
+            renderUpdates(updates, document.getElementById('updates-container'));
+            
+            // Show success message
+            const adminStatus = document.getElementById('admin-status');
+            adminStatus.textContent = 'Updates saved successfully!';
+            adminStatus.style.color = '#00ff9d';
+            adminStatus.classList.add('visible');
+            
+            setTimeout(() => {
+                adminStatus.classList.remove('visible');
+            }, 2000);
+            
+            console.log("%c[SYSTEM] Updates saved", "color: #00ff9d; font-weight: bold;");
+        });
+        
+        // Save devices from editor
+        document.getElementById('save-devices-edit').addEventListener('click', function() {
+            const devices = [];
+            const nameInputs = document.querySelectorAll('.device-name-input');
+            const specsInputs = document.querySelectorAll('.device-specs-input');
+            const iconInputs = document.querySelectorAll('.device-icon-input');
+            
+            for (let i = 0; i < nameInputs.length; i++) {
+                devices.push({
+                    name: nameInputs[i].value,
+                    specs: specsInputs[i].value,
+                    icon: iconInputs[i].value
+                });
+            }
+            
+            localStorage.setItem('cloudy-devices', JSON.stringify(devices));
+            renderDevices(devices, document.getElementById('device-list'));
+            
+            // Show success message
+            const adminStatus = document.getElementById('admin-status');
+            adminStatus.textContent = 'Devices saved successfully!';
+            adminStatus.style.color = '#00ff9d';
+            adminStatus.classList.add('visible');
+            
+            setTimeout(() => {
+                adminStatus.classList.remove('visible');
+            }, 2000);
+            
+            console.log("%c[SYSTEM] Devices saved", "color: #00ff9d; font-weight: bold;");
+        });
+        
+        // Save welcome from editor
+        document.getElementById('save-welcome-edit').addEventListener('click', function() {
+            const welcomeText = document.getElementById('edit-welcome-text').value;
+            const bioText = document.getElementById('edit-bio-text').value;
+            const bioSource = document.getElementById('edit-bio-source').value;
+            
+            const welcomeData = {
+                text: welcomeText,
+                bio: bioText,
+                source: bioSource
+            };
+            
+            localStorage.setItem('cloudy-welcome', JSON.stringify(welcomeData));
+            
+            // Update display
+            document.getElementById('welcome-text').innerHTML = welcomeText.replace(/\n/g, '<br>');
+            document.getElementById('bio-text').innerHTML = bioText.replace(/\n/g, '<br>').replace('Cloudy', '<span class="highlight">Cloudy</span>');
+            document.getElementById('bio-source').textContent = bioSource;
+            
+            // Show success message
+            const adminStatus = document.getElementById('admin-status');
+            adminStatus.textContent = 'Welcome section saved!';
+            adminStatus.style.color = '#00ff9d';
+            adminStatus.classList.add('visible');
+            
+            setTimeout(() => {
+                adminStatus.classList.remove('visible');
+            }, 2000);
+            
+            console.log("%c[SYSTEM] Welcome section saved", "color: #00ff9d; font-weight: bold;");
+        });
+        
+        // Save footer from editor
+        document.getElementById('save-footer-edit').addEventListener('click', function() {
+            const footerMain = document.getElementById('edit-footer-main').value;
+            const footerCredit1 = document.getElementById('edit-footer-credit1').value;
+            const footerCredit2 = document.getElementById('edit-footer-credit2').value;
+            
+            const footerData = {
+                main: footerMain,
+                credit1: footerCredit1,
+                credit2: footerCredit2
+            };
+            
+            localStorage.setItem('cloudy-footer', JSON.stringify(footerData));
+            
+            // Update display
+            document.getElementById('footer-main').textContent = footerMain;
+            document.getElementById('footer-credit1').textContent = footerCredit1;
+            document.getElementById('footer-credit2').textContent = footerCredit2;
+            
+            // Show success message
+            const adminStatus = document.getElementById('admin-status');
+            adminStatus.textContent = 'Footer saved!';
+            adminStatus.style.color = '#00ff9d';
+            adminStatus.classList.add('visible');
+            
+            setTimeout(() => {
+                adminStatus.classList.remove('visible');
+            }, 2000);
+            
+            console.log("%c[SYSTEM] Footer saved", "color: #00ff9d; font-weight: bold;");
+        });
+        
+        // Admin system
+        function initAdminSystem() {
+            const adminModal = document.getElementById('admin-modal');
+            const adminToggle = document.getElementById('admin-toggle');
+            const adminLoginBtn = document.getElementById('admin-login');
+            const adminCancelBtn = document.getElementById('admin-cancel');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const adminStatus = document.getElementById('admin-status');
+            const secretAdminTrigger = document.getElementById('secret-admin');
+            
+            // Check if already logged in from localStorage
+            const savedAdminState = localStorage.getItem('cloudy-admin');
+            if (savedAdminState === 'true') {
+                activateAdminMode();
+            }
+            
+            // Admin toggle button
+            adminToggle.addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                } else {
+                    deactivateAdminMode();
+                }
+            });
+            
+            // Edit buttons
+            document.getElementById('edit-welcome-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                    return;
+                }
+                
+                // Load current content
+                const welcome = JSON.parse(localStorage.getItem('cloudy-welcome') || JSON.stringify(defaultWelcome));
+                document.getElementById('edit-welcome-text').value = welcome.text;
+                document.getElementById('edit-bio-text').value = welcome.bio;
+                document.getElementById('edit-bio-source').value = welcome.source;
+                
+                // Show editor tab
+                document.getElementById('login-tab').classList.remove('active');
+                document.getElementById('editor-tab').classList.add('active');
+                
+                // Switch to welcome tab
+                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.admin-tab[data-tab="welcome"]').classList.add('active');
+                document.querySelector('.admin-tab-content[data-tab="welcome"]').classList.add('active');
+                
+                adminModal.style.display = 'flex';
+            });
+            
+            document.getElementById('edit-updates-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                    return;
+                }
+                
+                // Load updates editor
+                loadUpdatesEditor();
+                
+                // Show editor tab
+                document.getElementById('login-tab').classList.remove('active');
+                document.getElementById('editor-tab').classList.add('active');
+                
+                // Switch to updates tab
+                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.admin-tab[data-tab="updates"]').classList.add('active');
+                document.querySelector('.admin-tab-content[data-tab="updates"]').classList.add('active');
+                
+                adminModal.style.display = 'flex';
+            });
+            
+            document.getElementById('edit-devices-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                    return;
+                }
+                
+                // Load devices editor
+                loadDevicesEditor();
+                
+                // Show editor tab
+                document.getElementById('login-tab').classList.remove('active');
+                document.getElementById('editor-tab').classList.add('active');
+                
+                // Switch to devices tab
+                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.admin-tab[data-tab="devices"]').classList.add('active');
+                document.querySelector('.admin-tab-content[data-tab="devices"]').classList.add('active');
+                
+                adminModal.style.display = 'flex';
+            });
+            
+            document.getElementById('edit-footer-btn').addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                    return;
+                }
+                
+                // Load current content
+                const footer = JSON.parse(localStorage.getItem('cloudy-footer') || JSON.stringify(defaultFooter));
+                document.getElementById('edit-footer-main').value = footer.main;
+                document.getElementById('edit-footer-credit1').value = footer.credit1;
+                document.getElementById('edit-footer-credit2').value = footer.credit2;
+                
+                // Show editor tab
+                document.getElementById('login-tab').classList.remove('active');
+                document.getElementById('editor-tab').classList.add('active');
+                
+                // Switch to footer tab
+                document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => content.classList.remove('active'));
+                
+                document.querySelector('.admin-tab[data-tab="footer"]').classList.add('active');
+                document.querySelector('.admin-tab-content[data-tab="footer"]').classList.add('active');
+                
+                adminModal.style.display = 'flex';
+            });
+            
+            // Secret admin trigger (click top-left corner)
+            secretAdminTrigger.addEventListener('click', () => {
+                if (!isAdmin) {
+                    showAdminModal();
+                }
+            });
+            
+            // Login button
+            adminLoginBtn.addEventListener('click', () => {
+                const password = adminPasswordInput.value;
+                
+                if (password === ADMIN_PASSWORD) {
+                    // Correct password
+                    activateAdminMode();
+                    adminModal.style.display = 'none';
+                    adminPasswordInput.value = '';
+                    
+                    // Show success status
+                    adminStatus.textContent = 'Login successful!';
+                    adminStatus.style.color = '#00ff9d';
+                    adminStatus.classList.add('visible');
+                    
+                    setTimeout(() => {
+                        adminStatus.classList.remove('visible');
+                    }, 2000);
+                    
+                    console.log("%c[SYSTEM] Admin access granted", "color: #00ff9d; font-weight: bold;");
+                } else {
+                    // Wrong password
+                    adminStatus.textContent = 'Access denied!';
+                    adminStatus.style.color = '#ff5555';
+                    adminStatus.classList.add('visible');
+                    
+                    // Shake animation
+                    adminPasswordInput.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        adminPasswordInput.style.animation = '';
+                    }, 500);
+                    
+                    setTimeout(() => {
+                        adminStatus.classList.remove('visible');
+                    }, 2000);
+                    
+                    console.log("%c[SYSTEM] Admin access denied - wrong password", "color: #ff5555; font-weight: bold;");
+                }
+            });
+            
+            // Cancel button
+            adminCancelBtn.addEventListener('click', () => {
+                adminModal.style.display = 'none';
+                adminPasswordInput.value = '';
+                
+                // Reset to login tab
+                document.getElementById('login-tab').classList.add('active');
+                document.getElementById('editor-tab').classList.remove('active');
+            });
+            
+            // Cancel buttons for each editor
+            document.getElementById('cancel-welcome-edit').addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+            
+            document.getElementById('cancel-updates-edit').addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+            
+            document.getElementById('cancel-devices-edit').addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+            
+            document.getElementById('cancel-footer-edit').addEventListener('click', () => {
+                adminModal.style.display = 'none';
+            });
+            
+            // Enter key to login
+            adminPasswordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    adminLoginBtn.click();
+                }
+            });
+            
+            // Tab switching
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Update active content
+                    document.querySelectorAll('.admin-tab-content[data-tab]').forEach(content => {
+                        content.classList.remove('active');
+                        if (content.getAttribute('data-tab') === tabName) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+        
+        function showAdminModal() {
+            const adminModal = document.getElementById('admin-modal');
+            const adminPasswordInput = document.getElementById('admin-password');
+            
+            // Reset to login tab
+            document.getElementById('login-tab').classList.add('active');
+            document.getElementById('editor-tab').classList.remove('active');
+            
+            adminModal.style.display = 'flex';
+            adminPasswordInput.focus();
+        }
+        
+        function activateAdminMode() {
+            isAdmin = true;
+            localStorage.setItem('cloudy-admin', 'true');
+            
+            // Show admin controls
+            const adminButtons = document.querySelectorAll('.device-btn.admin-only, .edit-btn.admin-only');
+            adminButtons.forEach(btn => btn.classList.add('visible'));
+            
+            // Show device actions
+            const deviceActions = document.getElementById('device-actions');
+            deviceActions.classList.add('visible');
+            
+            // Show admin badge
+            const adminBadge = document.getElementById('admin-badge');
+            adminBadge.classList.add('visible');
+            
+            // Update admin toggle
+            const adminToggle = document.getElementById('admin-toggle');
+            adminToggle.style.backgroundColor = '#ff79c6';
+            adminToggle.style.boxShadow = '0 0 10px #ff79c6';
+            adminToggle.title = 'Admin Mode Active - Click to exit';
+            
+            // Update footer
+            const accessLevel = document.getElementById('access-level');
+            accessLevel.textContent = 'ADMIN';
+            accessLevel.style.color = '#ff79c6';
+            
+            console.log("%c[SYSTEM] Admin mode activated", "color: #ff79c6; font-weight: bold;");
+        }
+        
+        function deactivateAdminMode() {
+            isAdmin = false;
+            localStorage.setItem('cloudy-admin', 'false');
+            
+            // Hide admin controls
+            const adminButtons = document.querySelectorAll('.device-btn.admin-only, .edit-btn.admin-only');
+            adminButtons.forEach(btn => btn.classList.remove('visible'));
+            
+            // Hide device actions
+            const deviceActions = document.getElementById('device-actions');
+            deviceActions.classList.remove('visible');
+            
+            // Hide admin badge
+            const adminBadge = document.getElementById('admin-badge');
+            adminBadge.classList.remove('visible');
+            
+            // Update admin toggle
+            const adminToggle = document.getElementById('admin-toggle');
+            adminToggle.style.backgroundColor = 'rgba(255, 121, 198, 0.3)';
+            adminToggle.style.boxShadow = 'none';
+            adminToggle.title = 'Admin Access';
+            
+            // Update footer
+            const accessLevel = document.getElementById('access-level');
+            accessLevel.textContent = 'PUBLIC';
+            accessLevel.style.color = '';
+            
+            // Exit edit mode if active
+            const editBtn = document.getElementById('edit-device-btn');
+            if (editBtn && editBtn.innerHTML.includes('Save Edits')) {
+                // Trigger click to exit edit mode
+                const clickEvent = new MouseEvent('click');
+                editBtn.dispatchEvent(clickEvent);
+            }
+            
+            console.log("%c[SYSTEM] Admin mode deactivated", "color: #ff79c6; font-weight: bold;");
+        }
+        
+        // Apply selected theme
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            root.style.setProperty('--primary', theme.primary);
+            root.style.setProperty('--secondary', theme.secondary);
+            root.style.setProperty('--accent', theme.accent);
+            
+            // Update glow effects
+            root.style.setProperty('--neon-glow', `0 0 10px ${theme.accent}, 0 0 20px ${theme.accent}`);
+            root.style.setProperty('--box-glow', `0 0 15px ${theme.accent}30`);
+            
+            // Update rain color
+            const rainDrops = document.querySelectorAll('.rain-drop');
+            rainDrops.forEach(drop => {
+                drop.style.background = `linear-gradient(to bottom, transparent, ${theme.accent})`;
+            });
+            
+            // Update scan line
+            const scanLine = document.querySelector('.scan-line');
+            scanLine.style.background = `linear-gradient(to right, transparent, ${theme.accent}, transparent)`;
+            scanLine.style.boxShadow = `0 0 10px ${theme.accent}`;
+        }
+        
+        // Toggle rain effect
+        function initEffectToggle() {
+            const toggleBtn = document.getElementById('toggle-effects');
+            const rain = document.getElementById('rain-container');
+            const scanLine = document.querySelector('.scan-line');
+            let effectsOn = true;
+            
+            toggleBtn.addEventListener('click', () => {
+                effectsOn = !effectsOn;
+                
+                if (effectsOn) {
+                    rain.style.display = 'block';
+                    scanLine.style.display = 'block';
+                    toggleBtn.innerHTML = '<i class="fas fa-cloud-rain"></i> <span>Click HERE to turn effects off</span>';
+                    console.log("%c[SYSTEM] Visual effects: ENABLED", "color: #00ff9d; font-weight: bold;");
+                } else {
+                    rain.style.display = 'none';
+                    scanLine.style.display = 'none';
+                    toggleBtn.innerHTML = '<i class="fas fa-cloud"></i> <span>Click HERE to turn effects on</span>';
+                    console.log("%c[SYSTEM] Visual effects: DISABLED", "color: #ff5555; font-weight: bold;");
+                }
+            });
+        }
+        
+        // Add shake animation for wrong password
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createRain();
+            initThemes();
+            initContent();
+            initAdminSystem();
+            initEffectToggle();
+            
+            // Add some console logging for cyberpunk feel
+            setTimeout(() => {
+                console.log("%c[SYSTEM] Booting Cloudy's personal blog...", "color: #00ff9d; font-weight: bold;");
+                console.log("%c[SYSTEM] Loading themes...", "color: #00ff9d; font-weight: bold;");
+                console.log("%c[SYSTEM] Initializing rain effect...", "color: #00ff9d; font-weight: bold;");
+                console.log("%c[SYSTEM] Loading content database...", "color: #00ff9d; font-weight: bold;");
+                console.log("%c[SYSTEM] Admin system: READY (Password: Pindu2018isveryverycool)", "color: #00ff9d; font-weight: bold;");
+                console.log("%c[SYSTEM] Blog ready. Welcome visitor!", "color: #00ff9d; font-weight: bold;");
+                console.log("%c// oh, h-hi there v-visitor! uMu >.<", "color: #ff79c6; font-style: italic;");
+            }, 500);
+            
+            // Add blinking cursor effect to titles
+            const titles = document.querySelectorAll('.section-title');
+            titles.forEach(title => {
+                const cursor = document.createElement('span');
+                cursor.innerHTML = '_';
+                cursor.style.animation = 'blink 1s infinite';
+                title.appendChild(cursor);
+            });
+        });
+    </script>
+</body>
+</html>
